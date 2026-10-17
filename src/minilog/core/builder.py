@@ -1,7 +1,7 @@
 from minilog.core.appender import Appender
 from minilog.core.filter import Filter
 from minilog.core.level import Level
-from minilog.core.logger import Logger
+from minilog.core.logger import DEFAULT_LEVEL, Logger, _check
 
 
 class LoggerBuilder:
@@ -17,26 +17,20 @@ class LoggerBuilder:
     """
 
     def __init__(self):
-        self._level = Level.DEBUG
+        self._level = DEFAULT_LEVEL
         self._filters: list[Filter] = []
         self._appenders: list[Appender] = []
 
     def with_level(self, level: Level) -> "LoggerBuilder":
-        if not isinstance(level, Level):
-            raise TypeError(f"nível inválido: {level!r}")
-        self._level = level
+        self._level = _check(level, Level)
         return self
 
     def add_filter(self, log_filter: Filter) -> "LoggerBuilder":
-        if not isinstance(log_filter, Filter):
-            raise TypeError(f"{log_filter!r} não é um Filter")
-        self._filters.append(log_filter)
+        self._filters.append(_check(log_filter, Filter))
         return self
 
     def add_appender(self, appender: Appender) -> "LoggerBuilder":
-        if not isinstance(appender, Appender):
-            raise TypeError(f"{appender!r} não é um Appender")
-        self._appenders.append(appender)
+        self._appenders.append(_check(appender, Appender))
         return self
 
     def build(self) -> Logger:

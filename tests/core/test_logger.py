@@ -101,10 +101,20 @@ def test_builder_rejects_wrong_types():
 
 
 def test_loggers_from_the_same_builder_are_independent():
-    builder = LoggerBuilder().add_appender(ListAppender())
+    out = ListAppender()
+    builder = LoggerBuilder().add_appender(out)
     first = builder.build()
     builder.add_filter(BlockWord("x"))
     second = builder.build()
 
-    assert first._filters == []
-    assert len(second._filters) == 1
+    first.info("x primeiro")
+    second.info("x segundo")
+
+    assert out.lines == ["INFO x primeiro"]
+
+
+def test_logger_rejects_wrong_types_too():
+    with pytest.raises(TypeError):
+        Logger(level="INFO")
+    with pytest.raises(TypeError):
+        Logger(appenders=[print])
