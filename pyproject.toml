@@ -19,5 +19,11 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest"]
+
 [project.urls]
 Repository = "https://github.com/carlaferraz/DesignPatternsLibrary.git"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
