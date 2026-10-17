@@ -25,13 +25,13 @@ Mateus Lima da Cruz,
 ## Módulos
 
 ### Núcleo e configuração
-(Carla)
+(Mateus)
 
 ### Formatadores
 (Luiz)
 
 ### Destinos (appenders)
-(Baiano)
+(Carla)
 
 ### Filtros
 (Gabi)
