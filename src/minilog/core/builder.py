@@ -5,17 +5,6 @@ from minilog.core.logger import DEFAULT_LEVEL, Logger, _check
 
 
 class LoggerBuilder:
-    """Monta um Logger passo a passo (Builder).
-
-    Cada método devolve o próprio builder, então dá para encadear:
-
-        logger = (LoggerBuilder()
-                  .with_level(Level.INFO)
-                  .add_filter(meu_filtro)
-                  .add_appender(meu_appender)
-                  .build())
-    """
-
     def __init__(self):
         self._level = DEFAULT_LEVEL
         self._filters: list[Filter] = []

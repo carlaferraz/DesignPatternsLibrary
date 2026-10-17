@@ -1,9 +1,3 @@
-"""Exemplo de extensão: o cliente cria os próprios componentes.
-
-Nada aqui altera a biblioteca. Basta herdar das classes do contrato
-(Formatter, Appender, Filter) e entregar as peças ao LoggerBuilder.
-"""
-
 from minilog import Appender, Filter, Formatter, Level, LoggerBuilder
 
 

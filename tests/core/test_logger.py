@@ -25,8 +25,6 @@ class BlockWord(Filter):
         return self.word not in event.message
 
 
-# Logger (Facade)
-
 def test_each_level_method_logs_with_its_level():
     out = ListAppender()
     logger = Logger(appenders=[out])
@@ -68,8 +66,6 @@ def test_every_appender_receives_the_event():
 
     assert first.lines == second.lines == ["ERROR caiu"]
 
-
-# LoggerBuilder (Builder)
 
 def test_builder_chains_and_builds_a_working_logger():
     out = ListAppender()

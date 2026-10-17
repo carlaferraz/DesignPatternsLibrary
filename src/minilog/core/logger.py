@@ -9,13 +9,6 @@ DEFAULT_LEVEL = Level.DEBUG
 
 
 class Logger:
-    """Fachada (Facade) da biblioteca.
-
-    O cliente só chama logger.info("..."). Criar o LogEvent, checar o nível
-    mínimo, passar pelos filtros e entregar para cada appender fica aqui
-    dentro, escondido.
-    """
-
     def __init__(
         self,
         level: Level = DEFAULT_LEVEL,
