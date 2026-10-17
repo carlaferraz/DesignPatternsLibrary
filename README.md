@@ -14,12 +14,26 @@ Mateus Lima da Cruz,
 //
 
 ## Instalação
-//
+```
+pip install git+https://github.com/carlaferraz/DesignPatternsLibrary.git
+```
+
+Para desenvolver (com os testes):
+```
+pip install -e ".[dev]"
+pytest
+```
 
 ## Uso básico
-//
+```python
+from minilog import LoggerBuilder, Level
+
+logger = LoggerBuilder().with_level(Level.INFO).add_appender(meu_appender).build()
+logger.info("usuário entrou")
+```
 
 ## Como estender
+Herde de `Formatter`, `Appender` ou `Filter` e entregue a peça ao `LoggerBuilder`, sem alterar a biblioteca. Exemplo completo em [examples/core_extension.py](examples/core_extension.py).
 
 
 ## Módulos
