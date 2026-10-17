@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "minilog"
+version = "0.1.0"
+description = "Biblioteca extensível de logging e telemetria feita para a disciplina de Design Patterns."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Carla Ferraz de Araujo" },
+  { name = "Gabriella Tavares Pedroso" },
+  { name = "Luiz Gustavo Santarosa" },
+  { name = "Mateus Lima da Cruz" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Repository = "https://github.com/carlaferraz/DesignPatternsLibrary.git"
