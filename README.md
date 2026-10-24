@@ -44,6 +44,19 @@ Herde de `Formatter`, `Appender` ou `Filter` e entregue a peça ao `LoggerBuilde
 ### Formatadores
 (Luiz)
 
+Um formatador transforma o `LogEvent` em texto e é trocável sem mexer no logger nem no appender (**Strategy**): `TextFormatter` para texto simples (padrão e formato de hora configuráveis) e `JsonFormatter` para JSON.
+Os decoradores acrescentam comportamento a qualquer formatador, inclusive empilhados em qualquer combinação (**Decorator**): `ColorDecorator` colore a linha conforme o nível e `MaskDecorator` oculta cartão, CPF e trechos como `senha=` e `token=`.
+Todo decorador também é um `Formatter`, então ele entra no appender no lugar do formatador original.
+
+```python
+from minilog.formatters import ColorDecorator, MaskDecorator, TextFormatter
+
+formatter = ColorDecorator(MaskDecorator(TextFormatter()))
+appender = MeuAppender(formatter)
+```
+
+Extensão (formatador CSV e decorador de prefixo criados pelo cliente, sem alterar a lib): [examples/formatter_extension.py](examples/formatter_extension.py)
+
 ### Destinos (appenders)
 (Carla)
 
