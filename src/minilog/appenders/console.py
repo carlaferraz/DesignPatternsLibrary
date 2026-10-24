@@ -10,7 +10,7 @@ from minilog.formatters.text import TextFormatter
 
 class ConsoleAppender(Appender):
     def __init__(self, formatter: Optional[Formatter] = None, stream: Optional[TextIO] = None):
-        super().__init__(_check(formatter or TextFormatter(), Formatter))
+        super().__init__(_check(TextFormatter() if formatter is None else formatter, Formatter))
         self.stream = stream
 
     def append(self, event: LogEvent) -> None:

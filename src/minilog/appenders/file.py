@@ -15,7 +15,7 @@ class FileAppender(Appender):
         formatter: Optional[Formatter] = None,
         encoding: str = "utf-8",
     ):
-        super().__init__(_check(formatter or TextFormatter(), Formatter))
+        super().__init__(_check(TextFormatter() if formatter is None else formatter, Formatter))
         self.path = Path(path)
         self.encoding = encoding
 
