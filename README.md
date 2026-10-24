@@ -60,6 +60,21 @@ Extensão (formatador CSV e decorador de prefixo criados pelo cliente, sem alter
 ### Destinos (appenders)
 (Carla)
 
+Um appender decide para onde o log vai e usa o seu `Formatter` para escrever: `ConsoleAppender` escreve no terminal e `FileAppender` acrescenta linhas em um arquivo.
+O `Dispatcher` guarda uma lista de appenders e avisa todos a cada novo `LogEvent`, permitindo assinar e remover destinos mesmo com o logger já construído (**Observer**). Ele também é um `Appender`, então entra direto no `LoggerBuilder`.
+A `AppenderFactory` cria o appender a partir de um nome (`"console"`, `"file"`) e aceita registrar nomes novos sem alterar a biblioteca (**Factory**).
+
+```python
+from minilog import LoggerBuilder
+from minilog.appenders import AppenderFactory, Dispatcher
+
+destinos = Dispatcher([AppenderFactory.create("console"), AppenderFactory.create("file", path="app.log")])
+logger = LoggerBuilder().add_appender(destinos).build()
+logger.info("aparece no console e no arquivo")
+```
+
+Extensão (appender em memória criado pelo cliente e registrado na fábrica, sem alterar a lib): [examples/appender_extension.py](examples/appender_extension.py)
+
 ### Filtros
 (Gabi)
 
