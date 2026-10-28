@@ -41,6 +41,17 @@ Herde de `Formatter`, `Appender` ou `Filter` e entregue a peça ao `LoggerBuilde
 ### Núcleo e configuração
 (Mateus)
 
+O `Logger` é a fachada da biblioteca (**Facade**): recebe mensagens pelos métodos `debug`, `info`, `warning` e `error`, cria um `LogEvent` e coordena nível mínimo, filtros e destinos. Sem essa fachada, cada cliente precisaria montar e chamar esses componentes manualmente.
+O `LoggerBuilder` permite montar a configuração por etapas — nível mínimo, filtros e appenders — e finalizá-la com `build()` (**Builder**). Assim, evitamos um construtor com muitos parâmetros opcionais e deixamos explícita a configuração escolhida.
+
+```python
+from minilog import Level, LoggerBuilder
+from minilog.appenders import ConsoleAppender
+
+logger = LoggerBuilder().with_level(Level.INFO).add_appender(ConsoleAppender()).build()
+logger.info("usuário entrou")
+```
+
 ### Formatadores
 (Luiz)
 
@@ -77,6 +88,20 @@ Extensão (appender em memória criado pelo cliente e registrado na fábrica, se
 
 ### Filtros
 (Gabi)
+
+Os filtros decidem se um `LogEvent` deve continuar sendo processado. `MinimumLevelFilter` aceita eventos a partir de um nível e `KeywordFilter` aceita mensagens que contenham uma palavra-chave, sem diferenciar maiúsculas de minúsculas.
+A `FilterChain` executa os filtros em sequência e interrompe no primeiro que rejeitar o evento (**Chain of Responsibility**). A classe `BaseFilter` padroniza a validação e delega o critério para `matches`, que cada filtro concreto implementa (**Template Method**).
+
+```python
+from minilog import Level, LoggerBuilder
+from minilog.filters import FilterChain, KeywordFilter, MinimumLevelFilter
+
+filtros = FilterChain([MinimumLevelFilter(Level.INFO), KeywordFilter("pedido")])
+logger = LoggerBuilder().add_filter(filtros).add_appender(meu_appender).build()
+logger.info("pedido confirmado")
+```
+
+Extensão (filtro de mensagens repetidas criado pelo cliente, sem alterar a biblioteca): [examples/filter_extension.py](examples/filter_extension.py)
 
 Referencias utilizadas:
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
