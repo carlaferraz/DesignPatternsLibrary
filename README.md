@@ -8,7 +8,7 @@ Biblioteca extensível de logging e telemetria em Python, desenvolvida para a di
 - Mateus Lima da Cruz
 
 ## Vídeo de apresentação
-[LINK DO VÍDEO NO YOUTUBE]
+(https://youtu.be/Cihon6VTioE)
 
 ## Instalação
 Requer Python 3.9 ou mais recente.
