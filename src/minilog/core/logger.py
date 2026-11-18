@@ -15,9 +15,12 @@ class Logger:
         filters: Optional[Iterable[Filter]] = None,
         appenders: Optional[Iterable[Appender]] = None,
     ):
+        from minilog.appenders.dispatcher import Dispatcher
+        from minilog.filters.chain import FilterChain
+
         self.level = _check(level, Level)
-        self._filters = [_check(f, Filter) for f in filters or []]
-        self._appenders = [_check(a, Appender) for a in appenders or []]
+        self._filters = FilterChain(filters or [])
+        self._dispatcher = Dispatcher(appenders or [])
 
     def debug(self, message: str) -> None:
         self.log(Level.DEBUG, message)
@@ -35,15 +38,8 @@ class Logger:
         if level < self.level:
             return
         event = LogEvent(message, level)
-        if self._passes_filters(event):
-            self._dispatch(event)
-
-    def _passes_filters(self, event: LogEvent) -> bool:
-        return all(f.should_log(event) for f in self._filters)
-
-    def _dispatch(self, event: LogEvent) -> None:
-        for appender in self._appenders:
-            appender.append(event)
+        if self._filters.should_log(event):
+            self._dispatcher.notify(event)
 
 
 def _check(value, expected_type):
