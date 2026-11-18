@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from minilog import Level, LoggerBuilder
 from minilog.appenders import AppenderFactory, Dispatcher
 from minilog.filters import FilterChain, KeywordFilter, MinimumLevelFilter
 from minilog.formatters import ColorDecorator, JsonFormatter, MaskDecorator, TextFormatter
+
+Path("pedidos.log").unlink(missing_ok=True)
 
 console = AppenderFactory.create("console", formatter=ColorDecorator(MaskDecorator(TextFormatter())))
 arquivo = AppenderFactory.create("file", path="pedidos.log", formatter=MaskDecorator(JsonFormatter()))
