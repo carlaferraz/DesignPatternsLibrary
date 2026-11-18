@@ -83,7 +83,7 @@ logger.info("usuário entrou")
 ```
 
 ### Formatadores
-(Luiz)
+(Carla)
 
 Um formatador transforma o `LogEvent` em texto e é trocável sem mexer no logger nem no appender (**Strategy**): `TextFormatter` para texto simples (padrão e formato de hora configuráveis) e `JsonFormatter` para JSON.
 Os decoradores acrescentam comportamento a qualquer formatador, inclusive empilhados em qualquer combinação (**Decorator**): `ColorDecorator` colore a linha conforme o nível e `MaskDecorator` oculta cartão, CPF e trechos como `senha=` e `token=`.
@@ -99,7 +99,7 @@ appender = MeuAppender(formatter)
 Extensão (formatador CSV e decorador de prefixo criados pelo cliente, sem alterar a lib): [examples/formatter_extension.py](examples/formatter_extension.py)
 
 ### Destinos (appenders)
-(Carla)
+(Luiz)
 
 Um appender decide para onde o log vai e usa o seu `Formatter` para escrever: `ConsoleAppender` escreve no terminal e `FileAppender` acrescenta linhas em um arquivo.
 O `Dispatcher` guarda uma lista de appenders e avisa todos a cada novo `LogEvent`, permitindo assinar e remover destinos mesmo com o logger já construído (**Observer**). Ele também é um `Appender`, então entra direto no `LoggerBuilder`.
