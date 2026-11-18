@@ -1,19 +1,17 @@
-# DesignPatternsLibrary
-Repository for RA01 Design Patterns Subject
-
 # minilog
-Biblioteca extensível de logging e telemetria em Python, desenvolvida para a disciplina de Design Patterns.
+Biblioteca extensível de logging e telemetria em Python, desenvolvida para a disciplina de Design Patterns. Ela captura eventos da aplicação, filtra, formata e envia para um ou mais destinos, e cada uma dessas peças pode ser trocada ou estendida pelo cliente sem alterar o código da biblioteca. Não usa o módulo `logging` do Python.
 
 ## Integrantes
-Carla Ferraz de Araujo,
-Gabriella Tavares Pedroso,
-Luiz Gustavo Santarosa,
-Mateus Lima da Cruz,
+- Carla Ferraz de Araujo
+- Gabriella Tavares Pedroso
+- Luiz Gustavo Santarosa
+- Mateus Lima da Cruz
 
 ## Vídeo de apresentação
-//
+[LINK DO VÍDEO NO YOUTUBE]
 
 ## Instalação
+Requer Python 3.9 ou mais recente.
 ```
 pip install git+https://github.com/carlaferraz/DesignPatternsLibrary.git
 ```
@@ -26,14 +24,46 @@ pytest
 
 ## Uso básico
 ```python
-from minilog import LoggerBuilder, Level
+from minilog import Level, LoggerBuilder
+from minilog.appenders import ConsoleAppender
 
-logger = LoggerBuilder().with_level(Level.INFO).add_appender(meu_appender).build()
+logger = LoggerBuilder().with_level(Level.INFO).add_appender(ConsoleAppender()).build()
 logger.info("usuário entrou")
 ```
 
+Usando todos os módulos juntos (filtros, dois destinos e formatadores decorados):
+
+```python
+from minilog import Level, LoggerBuilder
+from minilog.appenders import AppenderFactory, Dispatcher
+from minilog.filters import FilterChain, KeywordFilter, MinimumLevelFilter
+from minilog.formatters import ColorDecorator, JsonFormatter, MaskDecorator, TextFormatter
+
+console = AppenderFactory.create("console", formatter=ColorDecorator(MaskDecorator(TextFormatter())))
+arquivo = AppenderFactory.create("file", path="pedidos.log", formatter=MaskDecorator(JsonFormatter()))
+filtros = FilterChain([MinimumLevelFilter(Level.INFO), KeywordFilter("pedido")])
+logger = LoggerBuilder().add_filter(filtros).add_appender(Dispatcher([console, arquivo])).build()
+
+logger.error("pedido 42 recusado: cartão 4111 1111 1111 1111")
+```
+
+Versão completa para rodar: [examples/full_usage.py](examples/full_usage.py).
+
 ## Como estender
-Herde de `Formatter`, `Appender` ou `Filter` e entregue a peça ao `LoggerBuilder`, sem alterar a biblioteca. Exemplo completo em [examples/core_extension.py](examples/core_extension.py).
+Herde de `Formatter`, `Appender` ou `Filter` e entregue a peça ao `LoggerBuilder`, sem alterar a biblioteca. Cada módulo tem um exemplo de extensão na pasta [examples](examples), e [examples/core_extension.py](examples/core_extension.py) cria as três peças de uma vez.
+
+## Padrões de projeto
+
+| Padrão | Onde | Para quê |
+|---|---|---|
+| Facade | `core/logger.py` (`Logger`) | O cliente chama só `logger.info()`; o Logger cria o evento e usa a `FilterChain` e o `Dispatcher` por dentro |
+| Builder | `core/builder.py` (`LoggerBuilder`) | Monta o logger em etapas encadeadas e valida a configuração no `build()` |
+| Strategy | `formatters/text.py`, `formatters/json.py` | Troca o formato da saída sem mexer no logger nem no appender |
+| Decorator | `formatters/decorators.py` | Acrescenta cor e mascaramento a qualquer formatador, empilhando |
+| Observer | `appenders/dispatcher.py` (`Dispatcher`) | Avisa todos os destinos inscritos a cada evento |
+| Factory | `appenders/factory.py` (`AppenderFactory`) | Cria appenders pelo nome e aceita registrar nomes novos |
+| Chain of Responsibility | `filters/chain.py` (`FilterChain`) | Passa o evento pelos filtros em sequência e para no primeiro que rejeitar |
+| Template Method | `filters/base.py` (`BaseFilter`) | Fixa a validação do evento e deixa só o critério `matches` para cada filtro |
 
 
 ## Módulos
@@ -103,6 +133,6 @@ logger.info("pedido confirmado")
 
 Extensão (filtro de mensagens repetidas criado pelo cliente, sem alterar a biblioteca): [examples/filter_extension.py](examples/filter_extension.py)
 
-Referencias utilizadas:
-https://packaging.python.org/en/latest/tutorials/packaging-projects/
-https://medium.com/@dev.daniel.amorim/como-criar-biblioteca-python-pypi-343219656838
+## Referências
+- https://packaging.python.org/en/latest/tutorials/packaging-projects/
+- https://medium.com/@dev.daniel.amorim/como-criar-biblioteca-python-pypi-343219656838
